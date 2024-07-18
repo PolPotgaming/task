@@ -40,6 +40,7 @@ public:
         connect(socket, &QUdpSocket::readyRead, this, &UdpChat::receiveMessage);
 
         //  Попытка соединения с sql сервером
+        /*
         db = QSqlDatabase::addDatabase("QPSQL");
         db.setHostName("localhost");
         db.setDatabaseName("bd_1"); 
@@ -51,6 +52,7 @@ public:
             // Обработка ошибки соединения
             outgoingBox->append("Connection not established.");
         }
+        */
     }
 
 private slots:
@@ -68,11 +70,13 @@ private slots:
         outgoingBox->append("Message delivered.");
 
         // Сохранение сообщения в базу данных
+        /*
         QSqlQuery query;
         query.prepare("INSERT INTO chat_log (message, direction) VALUES (:message, :direction)");
         query.bindValue(":message", message);
         query.bindValue(":direction", "outgoing");
         query.exec();
+        */
     }
 
     void sendFile() {
@@ -84,11 +88,13 @@ private slots:
             outgoingBox->append("File " + fileName + " send.");
 
             // Сохранение сообщения в базу данных
+            /*
             QSqlQuery query;
             query.prepare("INSERT INTO chat_log (message, direction) VALUES (:message, :direction)");
             query.bindValue(":message", "File " + fileName + " send.");
             query.bindValue(":direction", "outgoing");
             query.exec();
+            */
         }
     }
 
@@ -101,11 +107,13 @@ private slots:
             incomingBox->append("Recived: " + message);
 
             // Сохранение сообщения в базу данных
+            /*
             QSqlQuery query;
             query.prepare("INSERT INTO chat_log (message, direction) VALUES (:message, :direction)");
             query.bindValue(":message", message);
             query.bindValue(":direction", "incoming");
             query.exec();
+            */
         }
     }
 
