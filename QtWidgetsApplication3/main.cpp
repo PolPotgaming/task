@@ -39,7 +39,7 @@ public:
         connect(fileButton, &QPushButton::clicked, this, &UdpChat::sendFile);
         connect(socket, &QUdpSocket::readyRead, this, &UdpChat::receiveMessage);
 
-        //  подключение к базе данных
+        //  РџРѕРїС‹С‚РєР° СЃРѕРµРґРёРЅРµРЅРёСЏ СЃ sql СЃРµСЂРІРµСЂРѕРј
         db = QSqlDatabase::addDatabase("QPSQL");
         db.setHostName("localhost");
         db.setDatabaseName("bd_1"); 
@@ -48,7 +48,7 @@ public:
        
         bool ok = db.open();
         if (!ok) {
-            // Обработка ошибки подключения
+            // РћР±СЂР°Р±РѕС‚РєР° РѕС€РёР±РєРё СЃРѕРµРґРёРЅРµРЅРёСЏ
             outgoingBox->append("Connection not established.");
         }
     }
@@ -56,18 +56,18 @@ public:
 private slots:
     void sendMessage() {
         QByteArray message = messageInput->toPlainText().toUtf8();
-        int packetSize = 65507; // Максимальный размер UDP-пакета
+        int packetSize = 65507; // ГЊГ ГЄГ±ГЁГ¬Г Г«ГјГ­Г»Г© Г°Г Г§Г¬ГҐГ° UDP-ГЇГ ГЄГҐГІГ 
 
         for (int i = 0; i < message.size(); i += packetSize) {
             QByteArray datagram = message.mid(i, packetSize);
             socket->writeDatagram(datagram, QHostAddress::LocalHost, 1234);
-            QThread::msleep(10); // Пауза для гарантии последовательности пакетов
+            QThread::msleep(10); // Р—Р°РґРµСЂР¶РєР° РјРµР¶РґСѓ РїР°РєРµС‚Р°РјРё
         }
 
         messageInput->clear();
         outgoingBox->append("Message delivered.");
 
-        // сохранение сообщения в базе данных
+        // РЎРѕС…СЂР°РЅРµРЅРёРµ СЃРѕРѕР±С‰РµРЅРёСЏ РІ Р±Р°Р·Сѓ РґР°РЅРЅС‹С…
         QSqlQuery query;
         query.prepare("INSERT INTO chat_log (message, direction) VALUES (:message, :direction)");
         query.bindValue(":message", message);
@@ -83,7 +83,7 @@ private slots:
             socket->writeDatagram(fileData, QHostAddress::LocalHost, 5432);
             outgoingBox->append("File " + fileName + " send.");
 
-            // сохранение сообщения в базе данных
+            // РЎРѕС…СЂР°РЅРµРЅРёРµ СЃРѕРѕР±С‰РµРЅРёСЏ РІ Р±Р°Р·Сѓ РґР°РЅРЅС‹С…
             QSqlQuery query;
             query.prepare("INSERT INTO chat_log (message, direction) VALUES (:message, :direction)");
             query.bindValue(":message", "File " + fileName + " send.");
@@ -100,7 +100,7 @@ private slots:
             QString message = QString::fromUtf8(datagram);
             incomingBox->append("Recived: " + message);
 
-            // сохранение сообщения в базе данных
+            // РЎРѕС…СЂР°РЅРµРЅРёРµ СЃРѕРѕР±С‰РµРЅРёСЏ РІ Р±Р°Р·Сѓ РґР°РЅРЅС‹С…
             QSqlQuery query;
             query.prepare("INSERT INTO chat_log (message, direction) VALUES (:message, :direction)");
             query.bindValue(":message", message);
@@ -116,7 +116,7 @@ private:
     QTextEdit* incomingBox;
     QTextEdit* outgoingBox;
     QUdpSocket* socket;
-    QSqlDatabase db; // Добавлено
+    QSqlDatabase db; 
 };
 
 int main(int argc, char* argv[]) {
